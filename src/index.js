@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, bindActionCreators } from 'redux';
 import { connect, Provider } from 'react-redux';
 
 import './styles.scss';
@@ -12,11 +12,11 @@ const intialState = {
 const INCREMENT = 'INCREMENT';
 const DECREMENT = 'DECREMENT';
 
-const incrementValue = () => ({
+const increment = () => ({
   type: INCREMENT,
 });
 
-const decrementValue = () => ({
+const decrement = () => ({
   type: DECREMENT,
 });
 
@@ -40,7 +40,6 @@ const store = createStore(reducer);
 class Counter extends Component {
   render() {
     const { count, increment, decrement } = this.props;
-    console.log({ count, increment });
     return (
       <main className="Counter">
         <p className="count">{count}</p>
@@ -59,14 +58,13 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    increment() {
-      dispatch(incrementValue());
+  return bindActionCreators(
+    {
+      increment,
+      decrement,
     },
-    decrement() {
-      dispatch(decrementValue());
-    },
-  };
+    dispatch,
+  );
 };
 
 const CounterContainer = connect(mapStateToProps, mapDispatchToProps)(Counter);
